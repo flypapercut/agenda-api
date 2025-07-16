@@ -23,12 +23,20 @@ class AppointmentsController{
 
 
   // returns appointments of certain dates
-  indexByDate(request:Request, response:Response, next:NextFunction){
-    console.log("indexByDate")
+  async indexByDate(request:Request, response:Response, next:NextFunction){
+    try {
+    
+      console.log("index")
 
-    const date = request.params.date
+      const {date} = request.params
 
-    return response.status(200).send(`index date ${date}`)
+      const appointments = await knex<Appointment>("appointments").select().whereLike("date", date)
+
+      return response.status(200).json(appointments)
+    }
+    catch (error) {
+      next(error)
+    }
   }
 
   async create(request:Request, response:Response, next:NextFunction){
@@ -48,6 +56,21 @@ class AppointmentsController{
     catch (error) {
       next(error)
     }
+  }
+
+  async remove(request:Request, response:Response, next:NextFunction){
+    try {
+      
+      const {id} = request.params
+
+      await knex<Appointment>("appointments").delete().where("id", id)
+
+      return response.status(200).json({id})
+    } 
+    catch (error) {
+      next(error)
+    }
+
   }
 
 }
