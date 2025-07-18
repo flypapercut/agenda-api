@@ -58,6 +58,22 @@ class AppointmentsController{
     }
   }
 
+  async update(request:Request, response:Response, next:NextFunction){
+    try {
+      
+      const {id} = request.params
+      const {title, description, date, time} = appointmentSchema.parse(request.body)
+
+      await knex<Appointment>("appointments").update({title, description, date, time}).where("id", id)
+
+      return response.status(200).json("updated")
+
+    } 
+    catch (error) {
+      next(error)
+    }
+  }
+
   async remove(request:Request, response:Response, next:NextFunction){
     try {
       
