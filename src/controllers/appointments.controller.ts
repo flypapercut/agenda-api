@@ -64,7 +64,7 @@ class AppointmentsController{
       const {id} = request.params
       const {title, description, date, time} = appointmentSchema.parse(request.body)
 
-      await knex<Appointment>("appointments").update({title, description, date, time}).where("id", id)
+      await knex<Appointment>("appointments").update({title, description, date, time, updated_at: knex.fn.now()}).where("id", id)
 
       return response.status(200).json("updated")
 
