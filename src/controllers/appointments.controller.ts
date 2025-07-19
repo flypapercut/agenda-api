@@ -81,7 +81,7 @@ class AppointmentsController{
 
       await knex<Appointment>("appointments").delete().where("id", id)
 
-      return response.status(200).json({id})
+      return response.status(202).json({id})
     } 
     catch (error) {
       next(error)
